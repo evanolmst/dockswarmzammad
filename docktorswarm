@@ -108,7 +108,7 @@ services:
     
     # Added 'deploy' section here
     deploy:
-      replicas: 2   # Number of replicas
+      mode: global   # Number of replicas
       placement:
         constraints:
           - node.role == manager   # Ensures it runs on worker nodes only
