@@ -68,12 +68,6 @@ services:
       - zammad-storage:/opt/zammad/storage:ro
     user: 0:0
     
-    # Added 'deploy' section here
-    deploy:
-      replicas: 2   # Number of replicas
-      placement:
-        constraints:
-          - node.role == worker   # Ensures it runs on worker nodes only
 
   zammad-elasticsearch:
     image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.17.3}
@@ -88,13 +82,6 @@ services:
       ELASTICSEARCH_ENABLE_REST_TLS: 'false'
       # ELASTICSEARCH_USER is hardcoded to 'elastic' in the container.
       ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASS:-zammad}
-    
-    # Added 'deploy' section here
-    deploy:
-      replicas: 2   # Number of replicas
-      placement:
-        constraints:
-          - node.role == worker   # Ensures it runs on worker nodes only
 
   zammad-init:
     <<: *zammad-service
@@ -103,25 +90,11 @@ services:
       - zammad-postgresql
     restart: on-failure
     user: 0:0
-    
-    # Added 'deploy' section here
-    deploy:
-      replicas: 2   # Number of replicas
-      placement:
-        constraints:
-          - node.role == worker   # Ensures it runs on worker nodes only
 
   zammad-memcached:
     command: memcached -m 256M
     image: memcached:${MEMCACHE_VERSION:-1.6.37-alpine}
     restart: ${RESTART:-always}
-    
-    # Added 'deploy' section here
-    deploy:
-      replicas: 2   # Number of replicas
-      placement:
-        constraints:
-          - node.role == worker   # Ensures it runs on worker nodes only
 
   zammad-nginx:
     <<: *zammad-service
@@ -138,7 +111,7 @@ services:
       replicas: 2   # Number of replicas
       placement:
         constraints:
-          - node.role == worker   # Ensures it runs on worker nodes only
+          - node.role == manager   # Ensures it runs on worker nodes only
 
   zammad-postgresql:
     environment:
@@ -150,58 +123,26 @@ services:
     volumes:
       - postgresql-data:/var/lib/postgresql/data
     
-    # Added 'deploy' section here
-    deploy:
-      replicas: 2   # Number of replicas
-      placement:
-        constraints:
-          - node.role == worker   # Ensures it runs on worker nodes only
 
   zammad-railsserver:
     <<: *zammad-service
     command: ["zammad-railsserver"]
     
-    # Added 'deploy' section here
-    deploy:
-      replicas: 2   # Number of replicas
-      placement:
-        constraints:
-          - node.role == worker   # Ensures it runs on worker nodes only
 
   zammad-redis:
     image: redis:${REDIS_VERSION:-7.4.2-alpine}
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
-    
-    # Added 'deploy' section here
-    deploy:
-      replicas: 2   # Number of replicas
-      placement:
-        constraints:
-          - node.role == worker   # Ensures it runs on worker nodes only
 
   zammad-scheduler:
     <<: *zammad-service
     command: ["zammad-scheduler"]
-    
-    # Added 'deploy' section here
-    deploy:
-      replicas: 2   # Number of replicas
-      placement:
-        constraints:
-          - node.role == worker   # Ensures it runs on worker nodes only
 
   zammad-websocket:
     <<: *zammad-service
     command: ["zammad-websocket"]
     
-    # Added 'deploy' section here
-    deploy:
-      replicas: 2   # Number of replicas
-      placement:
-        constraints:
-          - node.role == worker   # Ensures it runs on worker nodes only
 
 volumes:
   elasticsearch-data:
