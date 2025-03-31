@@ -108,10 +108,10 @@ services:
     
     # Added 'deploy' section here
     deploy:
-      mode: global   # Number of replicas
+      mode: global   
       placement:
         constraints:
-          - node.role == manager   # Ensures it runs on worker nodes only
+          - node.role == manager   
 
   zammad-postgresql:
     environment:
